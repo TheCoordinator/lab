@@ -1,0 +1,143 @@
+<html>
+	<head>
+		<title>Event Delegation</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script type="text/javascript">
+			(function($){
+
+				var _log = function(message, type){
+					if(!$("#filters #" + type)[0]) {
+						$("#filters").append('<li><label for="'+ type +'">'+ type +'</label><input type="checkbox" checked id="'+ type +'"></li>')
+					}
+					$("#logger").append('<li class="' + type + '">'+ type + ': ' + message + '</li>')
+				}
+
+				var _handleFocus = function(e){
+					_log($(e.target).attr("id"), "focus");
+				}
+
+				var _handleBlur = function(e){
+					_log($(e.target).attr("id"), "blur");
+				}
+
+				var _handleClick = function(e){
+					_log($(e.target).attr("id"), "click");
+				}
+
+				var _handleKeyUp = function(e){
+					_log($(e.target).attr("id") + " " + e.keyCode, "keyup");
+				}
+
+				var _handleChange = function(e){
+					_log($(e.target).attr("id") + " " + $(e.target).val(), "change");
+				}
+
+				var _handleContextmenu = function(e){
+					e.preventDefault();
+					_log($(e.target).attr("id"), "contextmenu");
+				}
+
+				var _handleCopy = function(e){
+					_log($(e.target).attr("id"), "copy");
+				}
+
+				var _handleKeydown = function(e){
+					_log($(e.target).attr("id"), "keydown");
+				}
+
+				var _handleMouseover = function(e){
+					_log($(e.target).attr("id"), "mouseover");
+				}
+
+				var _handleMouseout = function(e){
+					_log($(e.target).attr("id"), "mouseout");
+				}
+
+				var _handleMousewheel = function(e){
+					_log($(e.target).attr("id"), "mousewheel");
+				}
+
+				var _handleScroll = function(e){
+					_log($(e.target).attr("id"), "scroll");
+				}
+
+				var _handleFilters = function(e){
+					event = $(e.target).attr("id");
+					if($(e.target).is(":checked")) {
+						$('<style type="text/css"> #logger .'+ event +' { display: block } </style>').appendTo("head");
+					}
+					else {
+						$('<style type="text/css"> #logger .'+ event +' { display: none } </style>').appendTo("head");
+					}
+				}
+
+				var _clearLog = function(e){
+					$("#logger li").remove();
+				}
+
+				$(document).ready(function(){
+					$("form").on("blur", "input", _handleBlur)
+							 .on("focus", "input", _handleFocus)
+							 .on("click", "input", _handleClick)
+							 .on("keyup", "input", _handleKeyUp)
+							 .on("change", "input", _handleChange)
+							 .on("contextmenu", "input", _handleContextmenu)
+							 .on("copy", "input", _handleCopy)
+							 .on("keydown", "input", _handleKeydown)
+							 .on("mouseover", "input", _handleMouseover)
+							 .on("mouseout", "input", _handleMouseout)
+							 .on("mousewheel", "input", _handleMousewheel)
+							 .on("scroll", "input", _handleScroll);
+
+					$("#filters").on("change", "input", _handleFilters);
+					$("#clearLog").click(_clearLog);
+				});
+
+			})(jQuery);
+
+		</script>
+		<style type="text/css">
+			#filters {
+				list-style-type: none;
+			}
+
+			#filters li {
+				display: inline;
+				padding: 0 10px;
+			}
+
+			#logger {
+				border: 1px solid #ccc;
+				background-color: #eee;
+				list-style-type: none;
+				padding: 0;
+			}
+
+			#logger li {
+				border-bottom: 1px solid #ccc;
+				padding: 5px;
+			}
+
+			#logger li:last-child {
+				border-bottom: none
+			}
+		</style>
+	</head>
+	<body>
+		<form action="">
+			<ul>
+				<li id="listItem1"><input type="text" value="item1" id="item1"></li>
+				<li id="listItem2"><input type="text" value="item2" id="item2"></li>
+				<li id="listItem3"><input type="text" value="item3" id="item3"></li>
+				<li id="listItem4"><input type="text" value="item4" id="item4"></li>
+				<li id="listItem5"><input type="text" value="item5" id="item5"></li>
+			</ul>
+		</form>
+		<ul id="filters">
+			<li id="clearLog"><button>Clear Log</button></li>
+		</ul>
+		<ul id="logger">
+			
+		</ul>
+	</body>
+</html>
